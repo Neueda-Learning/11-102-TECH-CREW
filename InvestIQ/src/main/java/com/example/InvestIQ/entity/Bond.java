@@ -21,6 +21,9 @@ public class Bond {
     @Column(nullable = false, unique = true, length = 20)
     private String symbol;
 
+    @Column(unique = true, length = 12)
+    private String isin;
+
     @Column(nullable = false, length = 100)
     private String issuer;
 
@@ -36,9 +39,10 @@ public class Bond {
     public Bond() {
     }
 
-    public Bond(Long id, String symbol, String issuer, BigDecimal faceValue, BigDecimal couponRate, LocalDate maturityDate) {
+    public Bond(Long id, String symbol, String isin, String issuer, BigDecimal faceValue, BigDecimal couponRate, LocalDate maturityDate) {
         this.id = id;
         this.symbol = symbol;
+        this.isin = isin;
         this.issuer = issuer;
         this.faceValue = faceValue;
         this.couponRate = couponRate;
@@ -59,6 +63,14 @@ public class Bond {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public String getIsin() {
+        return isin;
+    }
+
+    public void setIsin(String isin) {
+        this.isin = isin;
     }
 
     public String getIssuer() {

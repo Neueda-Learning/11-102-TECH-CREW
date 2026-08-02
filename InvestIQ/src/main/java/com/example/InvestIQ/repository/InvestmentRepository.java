@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface InvestmentRepository extends JpaRepository<Investment, Long> {
-    List<Investment> findBySymbol(String symbol);
+    List<Investment> findByPortfolioId(Long portfolioId);
+
+    List<Investment> findByPortfolioIdAndAssetType(Long portfolioId, String assetType);
 }
 

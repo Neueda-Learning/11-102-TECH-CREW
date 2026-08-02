@@ -1,5 +1,6 @@
 package com.example.InvestIQ;
 
+
 import com.example.InvestIQ.entity.Investment;
 import com.example.InvestIQ.repository.InvestmentRepository;
 import org.springframework.context.annotation.Bean;
