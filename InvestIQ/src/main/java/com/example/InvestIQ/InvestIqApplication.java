@@ -1,6 +1,6 @@
 package com.example.InvestIQ;
 
-import com.example.InvestIQ.model.Investment;
+import com.example.InvestIQ.entity.Investment;
 import com.example.InvestIQ.repository.InvestmentRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.SpringApplication;
@@ -23,8 +23,9 @@ public class InvestIqApplication {
 			for (Investment investment : investmentRepository.findAll()) {
 				System.out.println(
 					"Investment{id=" + investment.getId()
+						+ ", portfolioId=" + (investment.getPortfolio() != null ? investment.getPortfolio().getId() : null)
 						+ ", symbol='" + investment.getSymbol() + '\''
-						+ ", name='" + investment.getName() + '\''
+						+ ", assetType='" + investment.getAssetType() + '\''
 						+ ", quantity=" + investment.getQuantity()
 						+ ", purchasePrice=" + investment.getPurchasePrice()
 						+ ", purchaseDate=" + investment.getPurchaseDate()

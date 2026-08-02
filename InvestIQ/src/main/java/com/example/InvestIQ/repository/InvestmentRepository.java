@@ -1,6 +1,6 @@
 package com.example.InvestIQ.repository;
 
-import com.example.InvestIQ.model.Investment;
+import com.example.InvestIQ.entity.Investment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
