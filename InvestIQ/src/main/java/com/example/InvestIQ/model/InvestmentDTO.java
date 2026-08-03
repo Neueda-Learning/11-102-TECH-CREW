@@ -2,7 +2,7 @@ package com.example.InvestIQ.model;
 
 import java.time.LocalDate;
 
-public class Investment {
+public class InvestmentDTO {
 
     private Long id;
 
@@ -13,10 +13,10 @@ public class Investment {
     private Double purchasePrice;
     private LocalDate purchaseDate;
 
-    public Investment() {
+    public InvestmentDTO() {
     }
 
-    public Investment(Long id, String symbol, String name, Integer quantity, Double purchasePrice, LocalDate purchaseDate) {
+    public InvestmentDTO(Long id, String symbol, String name, Integer quantity, Double purchasePrice, LocalDate purchaseDate) {
         this.id = id;
         this.symbol = symbol;
         this.name = name;
