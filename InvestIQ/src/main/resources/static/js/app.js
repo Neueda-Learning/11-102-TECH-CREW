@@ -1,66 +1,63 @@
 document.addEventListener("DOMContentLoaded", function () {
+  if (!window.InvestIQStore) {
+    return;
+  }
+
   loadDashboard();
 });
 
 function loadDashboard() {
-  // Temp data for static dashboard preview
-  document.getElementById("investmentValue").innerText = "50,000";
-  document.getElementById("currentValue").innerText = "65,000";
-  document.getElementById("profitValue").innerText = "15,000";
-  document.getElementById("totalAssets").innerText = "5";
+  const summary = window.InvestIQStore.getSummary();
+
+  setText("investmentValue", window.InvestIQStore.formatCurrency(summary.totalInvested));
+  setText("currentValue", window.InvestIQStore.formatCurrency(summary.currentValue));
+  setText("profitValue", window.InvestIQStore.formatCurrency(summary.totalProfit));
+  setText("totalAssets", window.InvestIQStore.formatNumber(summary.totalAssets));
 
   loadPortfolioTable();
 }
 
 function loadPortfolioTable() {
-let investments=[
- {
- symbol: "AAPL",
- quantity: 10,
- buyPrice: 150,
- currentPrice: 170
- },
- {
- symbol: "GOOGL",
-    quantity: 5,
-    buyPrice: 1000,
-    currentPrice: 1200
-  },
-  {
-    symbol: "AMZN",
-    quantity: 2,
-    buyPrice: 2000,
-    currentPrice: 2500
-}];
+  const table = document.getElementById("portfolioBody");
+  if (!table) {
+    return;
+  }
 
-let table = document.getElementById("portfolioBody");
-table.innerHTML = "";
-investments.forEach(function(item){
+  const investments = window.InvestIQStore.getHoldings();
+  table.innerHTML = "";
 
-let profit=(item.currentPrice - item.buyPrice)* item.quantity;
+  if (!investments.length) {
+    table.innerHTML = '<tr><td colspan="5">No holdings yet. Use the Investments page to add a trade.</td></tr>';
+    return;
+  }
 
-table.innerHTML +=
-`<tr>
-<td>${item.symbol}</td>
-<td>${item.quantity}</td>
-<td>${item.buyPrice}</td>
-<td>${item.currentPrice}</td>
-<td>${profit}</td>
-</tr>
-`;
-
-
-});
+  investments.forEach(function (item) {
+    table.innerHTML +=
+      "<tr>" +
+      "<td>" + item.symbol + "</td>" +
+      "<td>" + window.InvestIQStore.formatNumber(item.quantity) + "</td>" +
+      "<td>" + window.InvestIQStore.formatCurrency(item.buyPrice) + "</td>" +
+      "<td>" + window.InvestIQStore.formatCurrency(item.currentPrice) + "</td>" +
+      "<td>" + window.InvestIQStore.formatCurrency(item.profit) + "</td>" +
+      "</tr>";
+  });
 }
 
-function browsePortfolio(){
-window.location.href="/portfolio.html";
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.innerText = value;
+  }
 }
 
-function addInvestment(){
-window.location.href="/addInvestment.html";
+function browsePortfolio() {
+  window.location.href = "portfolio.html";
 }
 
-function viewPerformance(){
-window.location.href="/performance.html";
+function addInvestment() {
+  window.location.href = "investment.html";
+}
+
+function viewPerformance() {
+  window.location.href = "performance.html";
 }

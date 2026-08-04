@@ -12,9 +12,9 @@
 <header>
     <h1>InvestIQ</h1>
     <nav>
-            <a href="index.html">Dashboard</a>
+            <a href="index.html" class="active">Dashboard</a>
             <a href="portfolio.html">Portfolio</a>
-            <a href="addInvestment.html">Add Investment</a>
+            <a href="investment.html">Investments</a>
             <a href="performance.html">Performance</a>
 
     </nav>
@@ -22,17 +22,17 @@
 <section class="Dashboard">
     <div class="card">
         <h3> Total Investment</h3>
-        <h2 id="investmentValue">0.00</h2>
+        <h2 id="investmentValue">₹0.00</h2>
     </div>
 
     <div class="card">
         <h3> Current Value</h3>
-        <h2 id="currentValue">0.00</h2>
+        <h2 id="currentValue">₹0.00</h2>
     </div>
 
     <div class="card">
         <h3> Profit/Loss</h3>
-        <h2 id="profitValue">0.00</h2>
+        <h2 id="profitValue">₹0.00</h2>
     </div>
 
     <div class="card">
@@ -43,11 +43,11 @@
 
 </section>
 
-<section class="quick-actions">
-    <button onclick="location.href='portfolio.html'">Browse Portfolio</button>
-    <button onclick="location.href='addInvestment.html'">Add Investment</button>
-    <button onclick="location.href='performance.html'">View Performance</button>
-</section>
+<!--<section class="quick-actions">-->
+<!--    <button onclick="location.href='portfolio.html'">Browse Portfolio</button>-->
+<!--    <button onclick="location.href='investment.html'">Buy / Sell Assets</button>-->
+<!--    <button onclick="location.href='performance.html'">View Performance</button>-->
+<!--</section>-->
 
 <section class="summary">
     <h2>Portfolio Summary</h2>
@@ -67,7 +67,13 @@
     </table>
 
 </section>
-
+    <div class="chart-container">
+        <h2>Portfolio Allocation</h2>
+        <canvas id="allocationChart"></canvas>
+    </div>
+<script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>
