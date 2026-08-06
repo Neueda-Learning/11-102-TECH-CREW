@@ -321,6 +321,15 @@ nav a.active {
   box-shadow: var(--shadow-3d-sm);
 }
 
+.table-scroll {
+  width: 100%;
+  overflow: auto;
+}
+
+.recent-activity-scroll {
+  max-height: 360px;
+}
+
 table th {
   background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
   color: var(--text-secondary);
