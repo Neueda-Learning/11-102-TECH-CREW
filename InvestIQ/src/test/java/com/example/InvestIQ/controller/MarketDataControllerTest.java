@@ -22,18 +22,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MarketDataControllerTest {
     @Mock
     private MarketDataService marketDataService;
-    
+
     @InjectMocks
     private MarketDataController marketDataController;
-    
+
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    
+
     @BeforeEach
     void setUp() {
         mockMvc = org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup(marketDataController).build();
     }
-    
+
     @Test
     void testGetMarketData() throws Exception {
         when(marketDataService.fetchStockQuote("AAPL"))
