@@ -1,0 +1,871 @@
+/* ==========================================================================
+   InvestIQ - Complete 3D Fintech Theme (Zerodha Inspired & Micro-Animated)
+   ========================================================================== */
+
+/* --- Import Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* --- CSS Variables & Design Tokens --- */
+:root {
+  /* Brand & Accent Colors */
+  --primary: #00baf2;
+  --primary-dark: #008eb8;
+  --primary-light: #e6f8ff;
+  --accent-purple: #5f259f;
+
+  /* Header & Navigation (Dark Glassmorphic 3D Nav) */
+  --nav-bg: #0f172a;
+  --nav-border: #1e293b;
+  --nav-text: #94a3b8;
+  --nav-text-active: #ffffff;
+
+  /* Surfaces & 3D Backgrounds */
+  --bg-app: #eef2f6;            /* Soft Slate Tint background for depth contrast */
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-inset: #e2e8f0;
+
+  /* Typography Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  /* Financial PnL Colors */
+  --profit-green: #00c08b;
+  --profit-green-bg: #e6fbf5;
+  --profit-green-border: #a3f3de;
+
+  --loss-red: #ea4d4d;
+  --loss-red-bg: #fdeeee;
+  --loss-red-border: #f9c5c3;
+
+  /* Borders & 3D Lighting */
+  --border-color: #cbd5e1;
+  --light-highlight: rgba(255, 255, 255, 0.8);
+
+  /* Multi-Layer 3D Elevation Shadows */
+  --shadow-3d-sm: 0 2px 4px rgba(15, 23, 42, 0.05), inset 0 1px 0 var(--light-highlight);
+  --shadow-3d-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04), inset 0 1px 0 #ffffff;
+  --shadow-3d-hover: 0 22px 35px -10px rgba(15, 23, 42, 0.16), 0 8px 12px -4px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff;
+  --shadow-inset: inset 0 2px 4px 0 rgba(15, 23, 42, 0.06);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* Transitions & Animation Curves */
+  --transition-fast: all 0.15s ease-out;
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==========================================================================
+   Keyframe Animations
+   ========================================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonGlow {
+  0% {
+    box-shadow: 0 4px 12px rgba(0, 208, 156, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(0, 208, 156, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(0, 208, 156, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* ==========================================================================
+   Base Reset & Layout Shell
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-shell {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+  flex: 1;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.page-hero {
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.page-hero h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.6px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.page-hero p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   3D Sticky Top Navigation Header
+   ========================================================================== */
+header {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 48px;
+  height: 72px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #38bdf8 0%, #00baf2 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  transition: var(--transition);
+}
+
+header h1:hover {
+  transform: scale(1.02);
+}
+
+header h1::before {
+  content: "📈";
+  font-size: 22px;
+  -webkit-text-fill-color: initial;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+nav a {
+  color: var(--nav-text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-bounce);
+  display: flex;
+  align-items: center;
+  height: 42px;
+}
+
+nav a:hover {
+  color: var(--nav-text-active);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+nav a.active {
+  color: var(--nav-text-active);
+  background: linear-gradient(180deg, rgba(0, 186, 242, 0.25) 0%, rgba(0, 186, 242, 0.1) 100%);
+  border: 1px solid rgba(0, 186, 242, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 186, 242, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Elevated 3D Metric Cards
+   ========================================================================== */
+.dashboard,
+.Dashboard,
+.performance-overview,
+.portfolio-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto 36px;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.card {
+  background: var(--bg-card);
+  padding: 26px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-3d-card);
+  transition: var(--transition-bounce);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  will-change: transform, box-shadow;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent-purple));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0.8;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: var(--shadow-3d-hover);
+  border-color: #94a3b8;
+}
+
+.card:hover::after {
+  opacity: 1;
+  height: 5px;
+}
+
+.card h3 {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+}
+
+.card h2 {
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  font-family: 'JetBrains Mono', monospace;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* ==========================================================================
+   Tactile Panels & 3D Financial Tables
+   ========================================================================== */
+.summary {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto 36px;
+}
+
+.summary h2,
+.chart-container h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  letter-spacing: -0.4px;
+}
+
+.full-width-panel {
+  background: var(--bg-card);
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-3d-card);
+  margin-bottom: 36px;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.summary table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-3d-sm);
+}
+
+table th {
+  background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  padding: 16px 22px;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
+  box-shadow: inset 0 1px 0 #ffffff;
+}
+
+table td {
+  padding: 18px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  transition: var(--transition-fast);
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tbody tr {
+  transition: var(--transition-fast);
+}
+
+table tbody tr:hover td {
+  background-color: #f1f5f9;
+}
+
+.holding-row {
+  cursor: pointer;
+}
+
+.holding-row:hover td {
+  background-color: #eaf3ff;
+}
+
+table td:nth-child(n+3) {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Financial PnL Badges */
+.profit-positive {
+  color: var(--profit-green) !important;
+  font-weight: 700 !important;
+}
+
+.profit-negative {
+  color: var(--loss-red) !important;
+  font-weight: 700 !important;
+}
+
+.profit-neutral {
+  color: var(--text-muted) !important;
+  font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   3D Forms & Interactive Cards
+   ========================================================================== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 28px;
+  margin-bottom: 36px;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.action-card,
+.form-container {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-3d-card);
+  transition: var(--transition-bounce);
+}
+
+.action-card:hover {
+  box-shadow: var(--shadow-3d-hover);
+  transform: translateY(-2px);
+}
+
+.form-container h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.form-container label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.form-container input,
+.form-container select {
+  width: 100%;
+  height: 48px;
+  padding: 0 18px;
+  margin-bottom: 20px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-inset);
+  transition: var(--transition);
+  outline: none;
+}
+
+.symbol-search-container {
+  position: relative;
+  width: 100%;
+}
+
+.symbol-suggestions,
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.symbol-suggestions::-webkit-scrollbar,
+.search-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.symbol-suggestions::-webkit-scrollbar-track,
+.search-dropdown::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.symbol-suggestions::-webkit-scrollbar-thumb,
+.search-dropdown::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.symbol-suggestions .symbol-suggestion-item,
+.search-dropdown .dropdown-item,
+.dropdown-item {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent !important;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #0f172a !important;
+  cursor: pointer;
+  border-bottom: 1px solid #eef2f7;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transform: none !important;
+  animation: none !important;
+  height: auto !important;
+  min-height: 44px;
+  border-radius: 0 !important;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.symbol-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.symbol-suggestions .symbol-suggestion-item:hover,
+.search-dropdown .dropdown-item:hover,
+.dropdown-item:hover {
+  background: #f1f5f9 !important;
+  transform: translateX(3px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  animation: none !important;
+}
+
+.symbol-suggestion-item strong {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.symbol-suggestion-item span {
+  color: #64748b;
+  margin-left: 6px;
+}
+
+.symbol-suggestion-item .owned-badge,
+.owned-qty-badge {
+  float: right;
+  margin-left: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(0, 192, 139, 0.12);
+  border: 1px solid rgba(0, 192, 139, 0.28);
+  color: #0f766e;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.symbol-suggestion-empty {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+#sellAvailableQuantity[readonly],
+#sellAverageBuyPrice[readonly] {
+  background: #eef2f7;
+  color: #334155;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(0, 186, 242, 0.18), var(--shadow-inset);
+  transform: translateY(-1px);
+}
+
+/* Physical Animated 3D Buttons */
+button,
+.form-container button {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(180deg, #00d09c 0%, #00b386 100%);
+  color: #ffffff;
+  border: 1px solid #009973;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  box-shadow: 0 4px 12px rgba(0, 208, 156, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  will-change: transform, box-shadow;
+}
+
+button:hover,
+.form-container button:hover {
+  transform: translateY(-3px);
+  animation: buttonGlow 2s infinite;
+}
+
+button:active,
+.form-container button:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 208, 156, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: none;
+}
+
+.danger-button {
+  background: linear-gradient(180deg, #eb5b56 0%, #d9443f 100%) !important;
+  border: 1px solid #b8332f !important;
+  box-shadow: 0 4px 12px rgba(235, 91, 86, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+.danger-button:hover {
+  box-shadow: 0 8px 18px rgba(235, 91, 86, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  animation: none;
+}
+
+/* Status Notifications */
+.status-message {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-3d-sm);
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+
+.status-success {
+  background: var(--profit-green-bg);
+  color: #007a5c;
+  border: 1px solid var(--profit-green-border);
+}
+
+.status-error {
+  background: var(--loss-red-bg);
+  color: #ab2824;
+  border: 1px solid var(--loss-red-border);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.holding-overview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.62);
+  backdrop-filter: blur(4px);
+  z-index: 1200;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.holding-overview-drawer {
+  width: min(520px, 96vw);
+  height: 100%;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+  color: #e2e8f0;
+  border-left: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: -18px 0 32px rgba(2, 6, 23, 0.35);
+  padding: 22px;
+  overflow-y: auto;
+  animation: drawerIn 0.22s ease-out;
+}
+
+@keyframes drawerIn {
+  from { transform: translateX(22px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.holding-overview-close {
+  width: 38px !important;
+  height: 38px !important;
+  margin-left: auto;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: #e2e8f0 !important;
+  font-size: 22px;
+  line-height: 1;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+.holding-overview-header h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+
+.holding-overview-header p {
+  color: #93c5fd;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.holding-overview-asset-badge {
+  display: inline-block;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #bfdbfe;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.holding-overview-price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.holding-overview-price-row strong {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+}
+
+.holding-overview-pnl-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.holding-overview-pnl-tag.profit-positive {
+  background: rgba(0, 192, 139, 0.18);
+  border: 1px solid rgba(0, 192, 139, 0.35);
+}
+
+.holding-overview-pnl-tag.profit-negative {
+  background: rgba(234, 77, 77, 0.2);
+  border: 1px solid rgba(234, 77, 77, 0.35);
+}
+
+.holding-overview-pnl-tag.profit-neutral {
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.holding-overview-chart-wrap {
+  position: relative;
+  height: 320px;
+  min-height: 320px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.62);
+  padding: 12px;
+}
+
+.holding-overview-chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.holding-overview-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.holding-stat-card {
+  background: rgba(15, 23, 42, 0.66);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.holding-stat-card span {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.holding-stat-card strong {
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.holding-overview-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.holding-overview-actions button {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Chart Section & Zerodha Line Graph Containers
+   ========================================================================== */
+.chart-section {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto 36px;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.chart-container {
+  background: var(--bg-card);
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-3d-card);
+  transition: var(--transition-bounce);
+}
+
+.chart-container:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  margin: 0 auto;
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 28px;
+  margin-bottom: 36px;
+}
+
+/* ==========================================================================
+   3D Footer
+   ========================================================================== */
+footer {
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  text-align: center;
+  padding: 28px;
+  font-size: 13px;
+  font-weight: 500;
+  border-top: 1px solid var(--nav-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-top: auto;
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  header {
+    padding: 0 20px;
+  }
+
+  .page-shell {
+    padding: 20px 16px 40px;
+  }
+
+  .chart-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-wrapper {
+    height: 280px;
+  }
+}

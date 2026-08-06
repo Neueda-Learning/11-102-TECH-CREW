@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestIQ Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <h1>InvestIQ</h1>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="portfolio.html" class="active">Portfolio</a>
+        <a href="investment.html">Investments</a>
+        <a href="performance.html">Performance</a>
+    </nav>
+</header>
+
+<main class="page-shell">
+    <section class="page-hero">
+        <h2>Portfolio Holdings</h2>
+        <p>Track your current stocks, bonds, and commodities in one place.</p>
+    </section>
+
+    <section class="dashboard portfolio-overview">
+        <div class="card">
+            <h3>Total Invested</h3>
+            <h2 id="portfolioInvested">₹0.00</h2>
+        </div>
+        <div class="card">
+            <h3>Current Value</h3>
+            <h2 id="portfolioCurrent">₹0.00</h2>
+        </div>
+        <div class="card">
+            <h3>Profit / Loss</h3>
+            <h2 id="portfolioProfit">₹0.00</h2>
+        </div>
+        <div class="card">
+            <h3>Active Holdings</h3>
+            <h2 id="portfolioAssets">0</h2>
+        </div>
+    </section>
+
+    <section class="summary full-width-panel">
+        <h2>Holdings Breakdown</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Avg Buy Price</th>
+                <th>Current Price</th>
+                <th>Market Value</th>
+                <th>Profit / Loss</th>
+            </tr>
+            </thead>
+            <tbody id="portfolioHoldingsBody"></tbody>
+        </table>
+    </section>
+
+    <section class="summary full-width-panel">
+        <h2>Recent Activity</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Symbol</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody id="transactionHistoryBody"></tbody>
+        </table>
+    </section>
+
+    <div id="holdingOverviewOverlay" class="holding-overview-overlay hidden" aria-hidden="true">
+        <aside class="holding-overview-drawer" role="dialog" aria-modal="true" aria-labelledby="holdingOverviewTitle">
+            <button id="holdingOverviewClose" type="button" class="holding-overview-close" aria-label="Close">&times;</button>
+
+            <div class="holding-overview-header">
+                <h3 id="holdingOverviewTitle">--</h3>
+                <p id="holdingOverviewSubtitle">--</p>
+                <div class="holding-overview-price-row">
+                    <strong id="holdingOverviewPrice">₹0.00</strong>
+                    <span id="holdingOverviewPnlTag" class="holding-overview-pnl-tag">0.00%</span>
+                </div>
+            </div>
+
+            <div class="holding-overview-chart-wrap" style="position: relative; height: 320px; width: 100%;">
+                <canvas id="stockOverviewChart"></canvas>
+            </div>
+
+            <div class="holding-overview-stats" id="holdingOverviewStats"></div>
+
+            <div class="holding-overview-actions">
+                <button id="holdingOverviewBuyBtn" type="button">Buy More</button>
+                <button id="holdingOverviewSellBtn" type="button" class="danger-button">Sell Asset</button>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<script src="js/data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="js/portfolio.js"></script>
+</body>
+</html>
