@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestIQ Investments</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <h1>InvestIQ</h1>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="investment.html" class="active">Investments</a>
+        <a href="performance.html">Performance</a>
+    </nav>
+</header>
+
+<main class="page-shell">
+    <section class="page-hero">
+        <h2>Buy and Sell Investments</h2>
+        <p>Create sample trades for stocks, bonds, and commodities. Changes are stored locally in your browser.</p>
+    </section>
+
+    <section class="form-grid">
+        <div class="form-container action-card">
+            <h2>Buy Asset</h2>
+            <div id="buyStatus" class="status-message hidden"></div>
+            <form id="buyForm">
+                <label for="buyAssetType">Asset Type</label>
+                <select id="buyAssetType" name="assetType" required>
+                    <option value="">Select type</option>
+                    <option value="STOCK">Stock</option>
+                    <option value="BOND">Bond</option>
+                    <option value="COMMODITY">Commodity</option>
+                </select>
+
+                <label for="buySymbol">Symbol</label>
+                <input id="buySymbol" name="symbol" type="text" maxlength="20" placeholder="AAPL or GOLD" required>
+
+                <label for="buyQuantity">Quantity</label>
+                <input id="buyQuantity" name="quantity" type="number" min="1" step="1" required>
+
+                <label for="buyPrice">Buy Price</label>
+                <input id="buyPrice" name="buyPrice" type="number" min="0.01" step="0.01" required>
+
+                <label for="buyCurrentPrice">Current Price</label>
+                <input id="buyCurrentPrice" name="currentPrice" type="number" min="0.01" step="0.01" required>
+
+                <label for="buyDate">Purchase Date</label>
+                <input id="buyDate" name="date" type="date" required>
+
+                <button type="submit">Add Buy Trade</button>
+            </form>
+        </div>
+
+        <div class="form-container action-card">
+            <h2>Sell Asset</h2>
+            <div id="sellStatus" class="status-message hidden"></div>
+            <form id="sellForm">
+                <label for="sellSymbol">Symbol</label>
+                <input id="sellSymbol" name="symbol" type="text" maxlength="20" placeholder="AAPL or GOLD" required>
+
+                <label for="sellQuantity">Quantity</label>
+                <input id="sellQuantity" name="quantity" type="number" min="1" step="1" required>
+
+                <label for="sellPrice">Sell Price</label>
+                <input id="sellPrice" name="sellPrice" type="number" min="0.01" step="0.01" required>
+
+                <label for="sellDate">Sell Date</label>
+                <input id="sellDate" name="date" type="date" required>
+
+                <button type="submit" class="danger-button">Record Sell Trade</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="summary full-width-panel">
+        <h2>Recent Transactions</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Symbol</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody id="investmentTransactionsBody"></tbody>
+        </table>
+    </section>
+</main>
+
+<script src="js/data.js"></script>
+<script src="js/investment.js"></script>
+</body>
+</html>
+

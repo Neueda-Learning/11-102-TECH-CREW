@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestIQ Performance</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <h1>InvestIQ</h1>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="investment.html">Investments</a>
+        <a href="performance.html" class="active">Performance</a>
+    </nav>
+</header>
+
+<main class="page-shell">
+    <section class="page-hero">
+        <h2>Performance Analytics</h2>
+        <p>Review profit and loss across your holdings with simple visual breakdowns.</p>
+    </section>
+
+    <section class="dashboard performance-overview">
+        <div class="card">
+            <h3>Total Invested</h3>
+            <h2 id="performanceInvested">₹0.00</h2>
+        </div>
+        <div class="card">
+            <h3>Current Value</h3>
+            <h2 id="performanceCurrent">₹0.00</h2>
+        </div>
+        <div class="card">
+            <h3>Total Profit / Loss</h3>
+            <h2 id="performanceProfit">₹0.00</h2>
+        </div>
+        <div class="card">
+            <h3>Best Performer</h3>
+            <h2 id="bestPerformer">-</h2>
+        </div>
+    </section>
+
+    <section class="chart-grid">
+        <div class="chart-container chart-panel">
+            <h2>Total Investment vs Current Value vs Profit / Loss</h2>
+            <canvas id="profitLossChart"></canvas>
+        </div>
+        <div class="chart-container chart-panel">
+            <h2>Asset Performance by Symbol</h2>
+            <canvas id="valueComparisonChart"></canvas>
+        </div>
+    </section>
+
+    <section class="summary full-width-panel">
+        <h2>Performance Table</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Type</th>
+                <th>Invested</th>
+                <th>Current Value</th>
+                <th>Profit / Loss</th>
+            </tr>
+            </thead>
+            <tbody id="performanceTableBody"></tbody>
+        </table>
+    </section>
+</main>
+
+<script src="js/data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/performance.js"></script>
+</body>
+</html>
