@@ -1,7 +1,6 @@
 package com.example.InvestIQ.controller;
 
-import com.example.InvestIQ.entity.Portfolio;
-import com.example.InvestIQ.entity.User;
+import com.example.InvestIQ.model.Portfolio;
 import com.example.InvestIQ.service.PortfolioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,9 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,22 +42,18 @@ class PortfolioControllerTest {
 
     @Test
     void createPortfolio_returnsSavedPortfolio() throws Exception {
-        User user = new User();
-        user.setId(1L);
+        Portfolio saved = new Portfolio(
+                11L,
+                1L,
+                "Growth",
+                "Growth picks",
+                LocalDateTime.of(2026, 1, 1, 10, 0)
+        );
 
-        Portfolio saved = new Portfolio();
-        saved.setId(11L);
-        saved.setName("Growth");
-        saved.setUser(user); //user ->User
-
-        when(portfolioService.createPortfolio(any(Long.class), any(Portfolio.class))).thenReturn(saved);
-
-        Portfolio request = new Portfolio();
-        request.setName("Growth");
+        when(portfolioService.createPortfolio(anyLong())).thenReturn(saved);
 
         mockMvc.perform(post("/portfolios/user/1")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(11))
                 .andExpect(jsonPath("$.name").value("Growth"));
@@ -65,9 +61,13 @@ class PortfolioControllerTest {
 
     @Test
     void getPortfolioByUserId_returnsList() throws Exception {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(12L);
-        portfolio.setName("Income");
+        Portfolio portfolio = new Portfolio(
+                12L,
+                1L,
+                "Income",
+                "Income portfolio",
+                LocalDateTime.of(2026, 1, 2, 11, 30)
+        );
 
         when(portfolioService.getPortfolioByUserId(1L)).thenReturn(List.of(portfolio));
 

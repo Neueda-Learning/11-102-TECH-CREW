@@ -30,6 +30,22 @@ CREATE TABLE IF NOT EXISTS stock_quotes (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+SET @stock_currency_exists := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'stock_quotes'
+      AND COLUMN_NAME = 'currency'
+);
+SET @stock_currency_sql := IF(
+    @stock_currency_exists = 0,
+    'ALTER TABLE stock_quotes ADD COLUMN currency VARCHAR(10) NOT NULL DEFAULT ''USD'' AFTER symbol',
+    'SELECT 1'
+);
+PREPARE stock_stmt FROM @stock_currency_sql;
+EXECUTE stock_stmt;
+DEALLOCATE PREPARE stock_stmt;
+
 CREATE TABLE IF NOT EXISTS bonds (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(20) NOT NULL UNIQUE,
@@ -39,6 +55,22 @@ CREATE TABLE IF NOT EXISTS bonds (
     coupon_rate DECIMAL(5, 2) NOT NULL,
     maturity_date DATE NOT NULL
 );
+
+SET @bond_currency_exists := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'bonds'
+      AND COLUMN_NAME = 'currency'
+);
+SET @bond_currency_sql := IF(
+    @bond_currency_exists = 0,
+    'ALTER TABLE bonds ADD COLUMN currency VARCHAR(10) NOT NULL DEFAULT ''USD'' AFTER symbol',
+    'SELECT 1'
+);
+PREPARE bond_stmt FROM @bond_currency_sql;
+EXECUTE bond_stmt;
+DEALLOCATE PREPARE bond_stmt;
 
 CREATE TABLE IF NOT EXISTS investments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -77,3 +109,20 @@ CREATE TABLE IF NOT EXISTS commodities (
     percent_change DECIMAL(5, 2),
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+SET @commodity_currency_exists := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'commodities'
+      AND COLUMN_NAME = 'currency'
+);
+SET @commodity_currency_sql := IF(
+    @commodity_currency_exists = 0,
+    'ALTER TABLE commodities ADD COLUMN currency VARCHAR(10) NOT NULL DEFAULT ''USD'' AFTER name',
+    'SELECT 1'
+);
+PREPARE commodity_stmt FROM @commodity_currency_sql;
+EXECUTE commodity_stmt;
+DEALLOCATE PREPARE commodity_stmt;
+

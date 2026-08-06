@@ -18,6 +18,7 @@ public class JdbcBondRepository implements BondRepository {
     private final RowMapper<Bond> bondRowMapper = (rs, rowNum) -> new Bond(
             rs.getLong("id"),
             rs.getString("symbol"),
+            rs.getString("currency"),
             rs.getString("issuer"),
             rs.getBigDecimal("face_value"),
             rs.getBigDecimal("coupon_rate"),
@@ -32,8 +33,9 @@ public class JdbcBondRepository implements BondRepository {
 
     @Override
     public Optional<Bond> addBond(Bond bond) {
-        int rowsAffected = jdbcTemplate.update("INSERT INTO bonds (symbol, issuer, face_value, coupon_rate, maturity_date) VALUES (?, ?, ?, ?, ?)",
+        int rowsAffected = jdbcTemplate.update("INSERT INTO bonds (symbol, currency, issuer, face_value, coupon_rate, maturity_date) VALUES (?, ?, ?, ?, ?, ?)",
                 bond.symbol(),
+                bond.currency(),
                 bond.issuer(),
                 bond.faceValue(),
                 bond.couponRate(),

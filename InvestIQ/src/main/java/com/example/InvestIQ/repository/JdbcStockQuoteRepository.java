@@ -28,6 +28,7 @@ public class JdbcStockQuoteRepository implements StockQuoteRepository{
     private final RowMapper<StockQuote> stockQuoteRowMapper=(rs, rownum)->new StockQuote(
             rs.getLong("id"),
             rs.getString("symbol"),
+            rs.getString("currency"),
             rs.getString("company_name"),
             rs.getBigDecimal("current_price"),
             rs.getBigDecimal("price_change"),
@@ -47,8 +48,9 @@ public class JdbcStockQuoteRepository implements StockQuoteRepository{
 
     @Override
     public Optional<StockQuote> addStockQuote(StockQuote stockQuote) {
-        return jdbcTemplate.update("INSERT INTO stock_quotes (symbol, company_name, current_price, price_change, percent_change, previous_close, day_high, day_low) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        return jdbcTemplate.update("INSERT INTO stock_quotes (symbol, currency, company_name, current_price, price_change, percent_change, previous_close, day_high, day_low) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 stockQuote.symbol(),
+                stockQuote.currency(),
                 stockQuote.companyName(),
                 stockQuote.currentPrice(),
                 stockQuote.priceChange(),

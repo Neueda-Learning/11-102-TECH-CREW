@@ -22,6 +22,7 @@ public class JdbcCommodityRepository implements CommodityRepository {
             rs.getLong("id"),
             rs.getString("symbol"),
             rs.getString("name"),
+            rs.getString("currency"),
             CommodityType.valueOf(rs.getString("category")),
             rs.getString("unit"),
             rs.getBigDecimal("current_price"),
@@ -39,9 +40,10 @@ public class JdbcCommodityRepository implements CommodityRepository {
 
     @Override
     public Optional<Commodity> addCommodity(Commodity commodity) {
-        int rowsAffected = jdbcTemplate.update("INSERT INTO commodities (symbol, name, category, unit, current_price, price_change, percent_change) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        int rowsAffected = jdbcTemplate.update("INSERT INTO commodities (symbol, name, currency, category, unit, current_price, price_change, percent_change) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 commodity.symbol(),
                 commodity.name(),
+                commodity.currency(),
                 commodity.category().name(),
                 commodity.unit(),
                 commodity.currentPrice(),

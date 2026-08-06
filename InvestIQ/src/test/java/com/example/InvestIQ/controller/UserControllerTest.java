@@ -1,6 +1,6 @@
 package com.example.InvestIQ.controller;
 
-import com.example.InvestIQ.entity.User;
+import com.example.InvestIQ.model.User;
 import com.example.InvestIQ.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -39,11 +42,10 @@ class UserControllerTest {
 
     @Test
     void createUser_returnsSavedUser() throws Exception {
-        User saved = new User("alice", "alice@example.com", "secret");
-        saved.setId(1L);
-        when(userService.createUser(any(User.class))).thenReturn(saved);
+        User saved = new User(1L, "alice", "alice@example.com", "secret", LocalDateTime.of(2026, 1, 1, 10, 0));
+        when(userService.createUser(any(User.class))).thenReturn(Optional.of(saved));
 
-        User request = new User("alice", "alice@example.com", "secret");
+        User request = new User(null, "alice", "alice@example.com", "secret", null);
 
         mockMvc.perform(post("/users")
                         .contentType(APPLICATION_JSON)
@@ -55,9 +57,8 @@ class UserControllerTest {
 
     @Test
     void getUserById_returnsUser() throws Exception {
-        User user = new User("bob", "bob@example.com", "secret");
-        user.setId(2L);
-        when(userService.getUserById(2L)).thenReturn(user);
+        User user = new User(2L, "bob", "bob@example.com", "secret", LocalDateTime.of(2026, 1, 2, 11, 0));
+        when(userService.getUserById(2L)).thenReturn(Optional.of(user));
 
         mockMvc.perform(get("/users/2"))
                 .andExpect(status().isOk())

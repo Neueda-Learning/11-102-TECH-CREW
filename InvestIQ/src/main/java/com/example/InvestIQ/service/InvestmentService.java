@@ -177,6 +177,7 @@ public class InvestmentService {
         StockQuote stockQuote = new StockQuote(
                 null,
                 symbol,
+                readCurrency(overview),
                 readString(overview, "Name", symbol),
                 readBigDecimal(globalQuote, "05. price", BigDecimal.ZERO),
                 readBigDecimal(globalQuote, "09. change", BigDecimal.ZERO),
@@ -197,6 +198,7 @@ public class InvestmentService {
         Bond bond = new Bond(
                 null,
                 symbol,
+                readCurrency(overview),
                 readString(overview, "Name", "Unknown Issuer"),
                 readBigDecimal(overview, "BookValue", BigDecimal.ZERO),
                 readBigDecimal(overview, "DividendYield", BigDecimal.ZERO),
@@ -217,6 +219,7 @@ public class InvestmentService {
                 null,
                 symbol,
                 name,
+                readCurrency(overview),
                 inferCommodityType(symbol, name),
                 "UNIT",
                 readBigDecimal(globalQuote, "05. price", BigDecimal.ZERO),
@@ -275,6 +278,10 @@ public class InvestmentService {
         } catch (NumberFormatException ex) {
             return fallback;
         }
+    }
+
+    private String readCurrency(Map<String, Object> overview) {
+        return readString(overview, "Currency", "USD");
     }
 
     private BigDecimal readPercent(Map<String, Object> map, String key) {
