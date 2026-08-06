@@ -1,15 +1,13 @@
 package com.example.InvestIQ.repository;
 
-import com.example.InvestIQ.entity.Transaction;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.InvestIQ.model.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    List<Transaction> findByPortfolioId(Long portfolioId);
+public interface TransactionRepository {
+    List<Transaction> findByPortfolioId(Long findByPortfolioId);
 
-    List<Transaction> findByPortfolioIdAndSymbol(Long portfolioId, String symbol);
+    Transaction save(Long portfolioId, Transaction transaction);
 }
 
