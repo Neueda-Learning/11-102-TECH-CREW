@@ -123,6 +123,9 @@ public class TwelveDataService {
 			return "5min";
 		}
 		String safeInterval = interval.trim().toLowerCase();
+		if ("daily".equals(safeInterval)) {
+			return "1day";
+		}
 		if ("60min".equals(safeInterval)) {
 			return "1h";
 		}
@@ -130,7 +133,8 @@ public class TwelveDataService {
 				|| "5min".equals(safeInterval)
 				|| "15min".equals(safeInterval)
 				|| "30min".equals(safeInterval)
-				|| "1h".equals(safeInterval)) {
+				|| "1h".equals(safeInterval)
+				|| "1day".equals(safeInterval)) {
 			return safeInterval;
 		}
 		return "5min";

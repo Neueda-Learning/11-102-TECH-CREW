@@ -62,19 +62,21 @@
 
     <section class="summary full-width-panel">
         <h2>Recent Activity</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Action</th>
-                <th>Symbol</th>
-                <th>Type</th>
-                <th>Quantity</th>
-                <th>Price</th>
-            </tr>
-            </thead>
-            <tbody id="transactionHistoryBody"></tbody>
-        </table>
+        <div class="table-scroll recent-activity-scroll">
+            <table>
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Action</th>
+                    <th>Symbol</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody id="transactionHistoryBody"></tbody>
+            </table>
+        </div>
     </section>
 
     <div id="holdingOverviewOverlay" class="holding-overview-overlay hidden" aria-hidden="true">
@@ -104,7 +106,7 @@
     </div>
 </main>
 
-<script src="js/data.js"></script>
+<script src="js/api-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="js/portfolio.js"></script>
 </body>
