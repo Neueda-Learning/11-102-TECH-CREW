@@ -1,9 +1,6 @@
 package com.example.InvestIQ.repository;
 
 import com.example.InvestIQ.model.Portfolio;
-import com.example.InvestIQ.model.User;
-import jakarta.persistence.EntityManager;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -32,13 +29,19 @@ public class JdbcPortfolioRepository implements PortfolioRepository {
 
 
     @Override
-    public Portfolio createPortfolio(Long userId) {
+    public Portfolio createPortfolio(Long userId, Portfolio portfolio) {
         String sql = "INSERT INTO portfolios (user_id, name, description, created_at) VALUES (?, ?, ?, ?)";
         String defaultName = "New Portfolio";
         String defaultDescription = "This is a new portfolio.";
+        String name = portfolio != null && portfolio.name() != null && !portfolio.name().isBlank()
+                ? portfolio.name()
+                : defaultName;
+        String description = portfolio != null && portfolio.description() != null && !portfolio.description().isBlank()
+                ? portfolio.description()
+                : defaultDescription;
         LocalDateTime now = LocalDateTime.now();
 
-        jdbcTemplate.update(sql, userId, defaultName, defaultDescription, now);
+        jdbcTemplate.update(sql, userId, name, description, now);
 
         // Retrieve the newly created portfolio
         String retrieveSql = "SELECT * FROM portfolios WHERE user_id = ? ORDER BY created_at DESC LIMIT 1";

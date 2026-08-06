@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -42,6 +43,14 @@ class PortfolioControllerTest {
 
     @Test
     void createPortfolio_returnsSavedPortfolio() throws Exception {
+        Portfolio request = new Portfolio(
+                null,
+                1L,
+                "Growth",
+                "Growth picks",
+                null
+        );
+
         Portfolio saved = new Portfolio(
                 11L,
                 1L,
@@ -50,10 +59,11 @@ class PortfolioControllerTest {
                 LocalDateTime.of(2026, 1, 1, 10, 0)
         );
 
-        when(portfolioService.createPortfolio(anyLong())).thenReturn(saved);
+        when(portfolioService.createPortfolio(anyLong(), any(Portfolio.class))).thenReturn(saved);
 
         mockMvc.perform(post("/portfolios/user/1")
-                        .contentType(APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(11))
                 .andExpect(jsonPath("$.name").value("Growth"));
