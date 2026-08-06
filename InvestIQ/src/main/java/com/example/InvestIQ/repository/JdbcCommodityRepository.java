@@ -17,17 +17,6 @@ public class JdbcCommodityRepository implements CommodityRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /*
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    symbol VARCHAR(20) NOT NULL UNIQUE,
-    name VARCHAR(100) NOT NULL,
-    category ENUM('GOLD', 'SILVER', 'PLATINUM', 'OIL') NOT NULL,
-    unit VARCHAR(20),
-    current_price DECIMAL(10, 2) NOT NULL,
-    price_change DECIMAL(10, 2),
-    percent_change DECIMAL(5, 2),
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-     */
 
     private final RowMapper<Commodity> commodityRowMapper = (rs, rowNum) -> new Commodity(
             rs.getLong("id"),

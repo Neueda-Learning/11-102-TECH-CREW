@@ -14,14 +14,6 @@ public class JdbcBondRepository implements BondRepository {
     JdbcBondRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-//    CREATE TABLE IF NOT EXISTS bonds (
-//            id BIGINT AUTO_INCREMENT PRIMARY KEY,
-//            symbol VARCHAR(20) NOT NULL UNIQUE,
-//    issuer VARCHAR(100) NOT NULL,
-//    face_value DECIMAL(15, 2) NOT NULL,
-//    coupon_rate DECIMAL(5, 2) NOT NULL,
-//    maturity_date DATE NOT NULL
-//);
 
     private final RowMapper<Bond> bondRowMapper = (rs, rowNum) -> new Bond(
             rs.getLong("id"),

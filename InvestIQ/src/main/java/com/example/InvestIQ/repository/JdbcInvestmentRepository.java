@@ -18,19 +18,6 @@ public class JdbcInvestmentRepository implements InvestmentRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /*
-    REATE TABLE IF NOT EXISTS investments (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    portfolio_id BIGINT NOT NULL,
-    symbol VARCHAR(20) NOT NULL,
-    asset_type VARCHAR(10) NOT NULL,
-    quantity INT NOT NULL,
-    purchase_price DECIMAL(10, 2) NOT NULL,
-    purchase_date DATE NOT NULL,
-    FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE
-);
-
-     */
 
     private final RowMapper<Investment> investmentRowMapper = (rs, rowNum) -> new Investment(
             rs.getLong("id"),

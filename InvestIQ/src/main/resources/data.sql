@@ -52,27 +52,27 @@ WHERE u.username = 'charlie'
 
 -- Seed stock quotes (unique on symbol)
 INSERT IGNORE INTO stock_quotes (
-    symbol, company_name, current_price, price_change, percent_change,
+    symbol, currency, company_name, current_price, price_change, percent_change,
     previous_close, day_high, day_low, last_updated
 ) VALUES
-('AAPL', 'Apple Inc.', 228.54, 1.34, 0.59, 227.20, 229.30, 226.70, '2026-08-06 09:45:00'),
-('TSLA', 'Tesla, Inc.', 249.12, -3.11, -1.23, 252.23, 253.10, 247.90, '2026-08-06 09:45:00'),
-('MSFT', 'Microsoft Corporation', 468.77, 2.02, 0.43, 466.75, 469.20, 465.90, '2026-08-06 09:45:00');
+('AAPL', 'USD', 'Apple Inc.', 228.54, 1.34, 0.59, 227.20, 229.30, 226.70, '2026-08-06 09:45:00'),
+('TSLA', 'USD', 'Tesla, Inc.', 249.12, -3.11, -1.23, 252.23, 253.10, 247.90, '2026-08-06 09:45:00'),
+('MSFT', 'USD', 'Microsoft Corporation', 468.77, 2.02, 0.43, 466.75, 469.20, 465.90, '2026-08-06 09:45:00');
 
 -- Seed bonds (unique on symbol)
-INSERT IGNORE INTO bonds (symbol, issuer, face_value, coupon_rate, maturity_date) VALUES
-('US10Y', 'US Treasury', 1000.00, 4.25, '2034-12-31'),
-('CORP2029', 'Acme Corporate Bond', 1000.00, 6.10, '2029-06-30'),
-('MUNI2031', 'Metro Municipal Bond', 5000.00, 4.75, '2031-09-15');
+INSERT IGNORE INTO bonds (symbol, currency, issuer, face_value, coupon_rate, maturity_date) VALUES
+('US10Y', 'USD', 'US Treasury', 1000.00, 4.25, '2034-12-31'),
+('CORP2029', 'USD', 'Acme Corporate Bond', 1000.00, 6.10, '2029-06-30'),
+('MUNI2031', 'USD', 'Metro Municipal Bond', 5000.00, 4.75, '2031-09-15');
 
 -- Seed commodities (unique on symbol)
 INSERT IGNORE INTO commodities (
-    symbol, name, category, unit, current_price, price_change, percent_change, last_updated
+    symbol, name, currency, category, unit, current_price, price_change, percent_change, last_updated
 ) VALUES
-('XAUUSD', 'Gold Spot', 'GOLD', 'oz', 2450.50, 12.40, 0.51, '2026-08-06 09:45:00'),
-('XAGUSD', 'Silver Spot', 'SILVER', 'oz', 31.27, 0.18, 0.58, '2026-08-06 09:45:00'),
-('XPTUSD', 'Platinum Spot', 'PLATINUM', 'oz', 1042.85, -5.15, -0.49, '2026-08-06 09:45:00'),
-('BRENT', 'Brent Crude Oil', 'OIL', 'barrel', 84.65, 0.92, 1.10, '2026-08-06 09:45:00');
+('XAUUSD', 'Gold Spot', 'USD', 'GOLD', 'oz', 2450.50, 12.40, 0.51, '2026-08-06 09:45:00'),
+('XAGUSD', 'Silver Spot', 'USD', 'SILVER', 'oz', 31.27, 0.18, 0.58, '2026-08-06 09:45:00'),
+('XPTUSD', 'Platinum Spot', 'USD', 'PLATINUM', 'oz', 1042.85, -5.15, -0.49, '2026-08-06 09:45:00'),
+('BRENT', 'Brent Crude Oil', 'USD', 'OIL', 'barrel', 84.65, 0.92, 1.10, '2026-08-06 09:45:00');
 
 -- Seed investments with FK mapping to portfolios
 INSERT INTO investments (portfolio_id, symbol, asset_type, quantity, purchase_price, purchase_date)

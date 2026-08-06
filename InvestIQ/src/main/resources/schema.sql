@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS portfolios (
 CREATE TABLE IF NOT EXISTS stock_quotes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(10) NOT NULL UNIQUE,
+    currency VARCHAR(10) NOT NULL,
     company_name VARCHAR(100),
     current_price DECIMAL(10, 2) NOT NULL,
     price_change DECIMAL(10, 2),
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS stock_quotes (
 CREATE TABLE IF NOT EXISTS bonds (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(20) NOT NULL UNIQUE,
+    currency VARCHAR(10) NOT NULL,
     issuer VARCHAR(100) NOT NULL,
     face_value DECIMAL(15, 2) NOT NULL,
     coupon_rate DECIMAL(5, 2) NOT NULL,
@@ -67,6 +69,7 @@ CREATE TABLE IF NOT EXISTS commodities (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
+    currency VARCHAR(10) NOT NULL,
     category ENUM('GOLD', 'SILVER', 'PLATINUM', 'OIL') NOT NULL,
     unit VARCHAR(20),
     current_price DECIMAL(10, 2) NOT NULL,
