@@ -14,6 +14,8 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+
+
     @GetMapping("/{portfolioId}")
     public List<Transaction> getTransactionsByPortfolioId(@PathVariable Long portfolioId) {
         return transactionService.getTransactionsByPortfolioId(portfolioId);

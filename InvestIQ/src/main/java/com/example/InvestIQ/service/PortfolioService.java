@@ -13,8 +13,8 @@ public class PortfolioService {
         this.portfolioRepository = portfolioRepository;
     }
 
-    public Portfolio createPortfolio(Long userId) {
-        return portfolioRepository.createPortfolio(userId);
+    public Portfolio createPortfolio(Long userId, Portfolio portfolio) {
+        return portfolioRepository.createPortfolio(userId, portfolio);
     }
 
     public List<Portfolio> getPortfolioByUserId(Long userId) {
