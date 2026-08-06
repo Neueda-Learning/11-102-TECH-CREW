@@ -1,7 +1,3 @@
-CREATE DATABASE IF NOT EXISTS investiq_db;
-USE investiq_db;
-
--- 1. Users Table
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -10,17 +6,16 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Portfolios Table
 CREATE TABLE IF NOT EXISTS portfolios (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    portfolio_name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,
     description VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    CONSTRAINT fk_portfolios_user
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 3. Stock Quotes Table
 CREATE TABLE IF NOT EXISTS stock_quotes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(10) NOT NULL UNIQUE,
@@ -35,7 +30,22 @@ CREATE TABLE IF NOT EXISTS stock_quotes (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 4. Bonds Table
+SET @stock_currency_exists := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'stock_quotes'
+      AND COLUMN_NAME = 'currency'
+);
+SET @stock_currency_sql := IF(
+    @stock_currency_exists = 0,
+    'ALTER TABLE stock_quotes ADD COLUMN currency VARCHAR(10) NOT NULL DEFAULT ''USD'' AFTER symbol',
+    'SELECT 1'
+);
+PREPARE stock_stmt FROM @stock_currency_sql;
+EXECUTE stock_stmt;
+DEALLOCATE PREPARE stock_stmt;
+
 CREATE TABLE IF NOT EXISTS bonds (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(20) NOT NULL UNIQUE,
@@ -46,7 +56,22 @@ CREATE TABLE IF NOT EXISTS bonds (
     maturity_date DATE NOT NULL
 );
 
--- 5. Investments Table
+SET @bond_currency_exists := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'bonds'
+      AND COLUMN_NAME = 'currency'
+);
+SET @bond_currency_sql := IF(
+    @bond_currency_exists = 0,
+    'ALTER TABLE bonds ADD COLUMN currency VARCHAR(10) NOT NULL DEFAULT ''USD'' AFTER symbol',
+    'SELECT 1'
+);
+PREPARE bond_stmt FROM @bond_currency_sql;
+EXECUTE bond_stmt;
+DEALLOCATE PREPARE bond_stmt;
+
 CREATE TABLE IF NOT EXISTS investments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     portfolio_id BIGINT NOT NULL,
@@ -55,10 +80,10 @@ CREATE TABLE IF NOT EXISTS investments (
     quantity INT NOT NULL,
     purchase_price DECIMAL(10, 2) NOT NULL,
     purchase_date DATE NOT NULL,
-    FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE
+    CONSTRAINT fk_investments_portfolio
+        FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE
 );
 
--- 6. Transactions Table
 CREATE TABLE IF NOT EXISTS transactions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     portfolio_id BIGINT NOT NULL,
@@ -68,10 +93,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     quantity INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE
+    CONSTRAINT fk_transactions_portfolio
+        FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE
 );
 
--- 7. Commodities Table
 CREATE TABLE IF NOT EXISTS commodities (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     symbol VARCHAR(20) NOT NULL UNIQUE,
@@ -85,7 +110,19 @@ CREATE TABLE IF NOT EXISTS commodities (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Existing DB migration note:
--- If `commodities` already exists with VARCHAR category, run this once:
--- ALTER TABLE commodities
---   MODIFY COLUMN category ENUM('GOLD', 'SILVER', 'PLATINUM', 'OIL') NOT NULL;
+SET @commodity_currency_exists := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'commodities'
+      AND COLUMN_NAME = 'currency'
+);
+SET @commodity_currency_sql := IF(
+    @commodity_currency_exists = 0,
+    'ALTER TABLE commodities ADD COLUMN currency VARCHAR(10) NOT NULL DEFAULT ''USD'' AFTER name',
+    'SELECT 1'
+);
+PREPARE commodity_stmt FROM @commodity_currency_sql;
+EXECUTE commodity_stmt;
+DEALLOCATE PREPARE commodity_stmt;
+
