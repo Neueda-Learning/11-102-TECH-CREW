@@ -1,76 +1,9 @@
 package com.example.InvestIQ.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Investment {
-
-    private Long id;
-
-    private String symbol;
-
-    private String name;
-    private Integer quantity;
-    private Double purchasePrice;
-    private LocalDate purchaseDate;
-
-    public Investment() {
-    }
-
-    public Investment(Long id, String symbol, String name, Integer quantity, Double purchasePrice, LocalDate purchaseDate) {
-        this.id = id;
-        this.symbol = symbol;
-        this.name = name;
-        this.quantity = quantity;
-        this.purchasePrice = purchasePrice;
-        this.purchaseDate = purchaseDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(Double purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-
-    public LocalDate getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
+public record Investment(Long id, Long portfolio_id, String symbol, String assetType, Integer quantity,
+						 BigDecimal purchasePrice, LocalDate purchaseDate) {
 }
 

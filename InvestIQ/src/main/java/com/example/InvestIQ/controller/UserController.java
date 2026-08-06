@@ -1,28 +1,31 @@
 package com.example.InvestIQ.controller;
 
-import com.example.InvestIQ.entity.User;
+import com.example.InvestIQ.model.User;
 import com.example.InvestIQ.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 public class UserController {
-    UserService userService;
+    private final UserService userService;
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/users")
-    public User createUser() {
-        return userService.createUser();
+    public Optional<User> createUser(@RequestBody User user) {
+        return userService.createUser(user);
     }
 
     @GetMapping("/users/{userId}")
-    public User getUserById(@PathVariable Long userId) {
+    public Optional<User> getUserById(@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
 
     @PutMapping("/users/{userId}")
-    public User updateUser(@PathVariable Long userId, @RequestBody User user) {
+    public Optional<User> updateUser(@PathVariable Long userId, @RequestBody User user) {
         return userService.updateUser(userId, user);
     }
 

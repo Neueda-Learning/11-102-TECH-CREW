@@ -1,13 +1,10 @@
 package com.example.InvestIQ.repository;
 
-import com.example.InvestIQ.entity.Bond;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
+import com.example.InvestIQ.model.Bond;
 import java.util.Optional;
 
-@Repository
-public interface BondRepository extends JpaRepository<Bond, Long> {
-    Optional<Bond> findByIsin(String isin);
+public interface BondRepository {
+    Optional<Bond> findBySymbol(String symbol);
+    Optional<Bond> addBond(Bond bond);
 }
 
