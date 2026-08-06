@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InvestIQ Dashboard</title>
 
+    <!-- Google Fonts for Modern Fintech UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -12,47 +17,55 @@
 <header>
     <h1>InvestIQ</h1>
     <nav>
-            <a href="index.html" class="active">Dashboard</a>
-            <a href="portfolio.html">Portfolio</a>
-            <a href="investment.html">Investments</a>
-            <a href="performance.html">Performance</a>
-
+        <a href="index.html" class="active">Dashboard</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="investment.html">Investments</a>
+        <a href="performance.html">Performance</a>
     </nav>
 </header>
-<section class="Dashboard">
-    <div class="card">
-        <h3> Total Investment</h3>
-        <h2 id="investmentValue">₹0.00</h2>
-    </div>
 
-    <div class="card">
-        <h3> Current Value</h3>
-        <h2 id="currentValue">₹0.00</h2>
-    </div>
+<main class="page-shell">
+    <section class="page-hero">
+        <h2>Dashboard Overview</h2>
+        <p>Real-time view of your total investments, current market valuation, asset distribution, and portfolio summary.</p>
+    </section>
 
-    <div class="card">
-        <h3> Profit/Loss</h3>
-        <h2 id="profitValue">₹0.00</h2>
-    </div>
+    <section class="Dashboard">
+        <div class="card">
+            <h3>Total Investment</h3>
+            <h2 id="investmentValue">₹0.00</h2>
+        </div>
 
-    <div class="card">
-        <h3>Total Assets</h3>
-        <h2 id="totalAssets">0.00</h2>
-    </div>
+        <div class="card">
+            <h3>Current Value</h3>
+            <h2 id="currentValue">₹0.00</h2>
+        </div>
 
+        <div class="card">
+            <h3>Profit / Loss</h3>
+            <h2 id="profitValue">₹0.00</h2>
+        </div>
 
-</section>
+        <div class="card">
+            <h3>Total Assets</h3>
+            <h2 id="totalAssets">0</h2>
+        </div>
+    </section>
 
-<!--<section class="quick-actions">-->
-<!--    <button onclick="location.href='portfolio.html'">Browse Portfolio</button>-->
-<!--    <button onclick="location.href='investment.html'">Buy / Sell Assets</button>-->
-<!--    <button onclick="location.href='performance.html'">View Performance</button>-->
-<!--</section>-->
+    <!-- Chart Section with Controlled Canvas Sizing -->
+    <section class="chart-section">
+        <div class="chart-container chart-card">
+            <h2>Portfolio Allocation</h2>
+            <div class="chart-wrapper">
+                <canvas id="allocationChart"></canvas>
+            </div>
+        </div>
+    </section>
 
-<section class="summary">
-    <h2>Portfolio Summary</h2>
-    <table>
-        <thead>
+    <section class="summary full-width-panel">
+        <h2>Portfolio Summary</h2>
+        <table>
+            <thead>
             <tr>
                 <th>Symbol</th>
                 <th>Quantity</th>
@@ -60,17 +73,18 @@
                 <th>Current Price</th>
                 <th>Profit</th>
             </tr>
-        </thead>
-        <tbody id="portfolioBody">
-            <!-- Portfolio summary will be populated here -->
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="portfolioBody">
+            <!-- Portfolio summary populated dynamically via app.js -->
+            </tbody>
+        </table>
+    </section>
+</main>
 
-</section>
-    <div class="chart-container">
-        <h2>Portfolio Allocation</h2>
-        <canvas id="allocationChart"></canvas>
-    </div>
+<footer>
+    <p>© 2026 InvestIQ — Built by FinTech CREW</p>
+</footer>
+
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

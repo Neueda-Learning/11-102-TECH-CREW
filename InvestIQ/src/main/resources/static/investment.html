@@ -37,7 +37,10 @@
                 </select>
 
                 <label for="buySymbol">Symbol</label>
-                <input id="buySymbol" name="symbol" type="text" maxlength="20" placeholder="AAPL or GOLD" required>
+                <div class="symbol-search-container" id="buySymbolSearchContainer">
+                    <input id="buySymbol" name="symbol" type="text" maxlength="20" placeholder="AAPL or GOLD" autocomplete="off" required>
+                    <div id="buySymbolSuggestions" class="symbol-suggestions hidden" role="listbox" aria-label="Stock symbol suggestions"></div>
+                </div>
 
                 <label for="buyQuantity">Quantity</label>
                 <input id="buyQuantity" name="quantity" type="number" min="1" step="1" required>
@@ -59,8 +62,25 @@
             <h2>Sell Asset</h2>
             <div id="sellStatus" class="status-message hidden"></div>
             <form id="sellForm">
+                <label for="sellAssetType">Asset Type</label>
+                <select id="sellAssetType" name="assetType" required>
+                    <option value="">Select type</option>
+                    <option value="STOCK">Stock</option>
+                    <option value="BOND">Bond</option>
+                    <option value="COMMODITY">Commodity</option>
+                </select>
+
                 <label for="sellSymbol">Symbol</label>
-                <input id="sellSymbol" name="symbol" type="text" maxlength="20" placeholder="AAPL or GOLD" required>
+                <div class="symbol-search-container" id="sellSymbolSearchContainer">
+                    <input id="sellSymbol" name="symbol" type="text" maxlength="20" placeholder="Search owned symbol" autocomplete="off" required>
+                    <div id="sellSymbolSuggestions" class="symbol-suggestions hidden" role="listbox" aria-label="Owned symbol suggestions"></div>
+                </div>
+
+                <label for="sellAvailableQuantity">Available Quantity / Shares</label>
+                <input id="sellAvailableQuantity" type="text" placeholder="Select a symbol" readonly>
+
+                <label for="sellAverageBuyPrice">Average Buy Price</label>
+                <input id="sellAverageBuyPrice" type="text" placeholder="Select a symbol" readonly>
 
                 <label for="sellQuantity">Quantity</label>
                 <input id="sellQuantity" name="quantity" type="number" min="1" step="1" required>
@@ -95,6 +115,7 @@
 </main>
 
 <script src="js/data.js"></script>
+<script src="js/api-config.js"></script>
 <script src="js/investment.js"></script>
 </body>
 </html>

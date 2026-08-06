@@ -76,9 +76,36 @@
             <tbody id="transactionHistoryBody"></tbody>
         </table>
     </section>
+
+    <div id="holdingOverviewOverlay" class="holding-overview-overlay hidden" aria-hidden="true">
+        <aside class="holding-overview-drawer" role="dialog" aria-modal="true" aria-labelledby="holdingOverviewTitle">
+            <button id="holdingOverviewClose" type="button" class="holding-overview-close" aria-label="Close">&times;</button>
+
+            <div class="holding-overview-header">
+                <h3 id="holdingOverviewTitle">--</h3>
+                <p id="holdingOverviewSubtitle">--</p>
+                <div class="holding-overview-price-row">
+                    <strong id="holdingOverviewPrice">₹0.00</strong>
+                    <span id="holdingOverviewPnlTag" class="holding-overview-pnl-tag">0.00%</span>
+                </div>
+            </div>
+
+            <div class="holding-overview-chart-wrap" style="position: relative; height: 320px; width: 100%;">
+                <canvas id="stockOverviewChart"></canvas>
+            </div>
+
+            <div class="holding-overview-stats" id="holdingOverviewStats"></div>
+
+            <div class="holding-overview-actions">
+                <button id="holdingOverviewBuyBtn" type="button">Buy More</button>
+                <button id="holdingOverviewSellBtn" type="button" class="danger-button">Sell Asset</button>
+            </div>
+        </aside>
+    </div>
 </main>
 
 <script src="js/data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="js/portfolio.js"></script>
 </body>
 </html>

@@ -1,46 +1,87 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const canvas = document.getElementById("allocationChart");
-
-  if (!canvas || typeof Chart === "undefined" || !window.InvestIQStore) {
+  if (!window.InvestIQStore || typeof Chart === "undefined") {
     return;
   }
 
-  const allocation = window.InvestIQStore.getAllocationData();
-  const hasAssets = allocation.values.some(function (value) {
-    return value > 0;
-  });
+  renderAllocationChart();
+});
+
+function renderAllocationChart() {
+  const canvas = document.getElementById("allocationChart");
+  if (!canvas) {
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+  const data = window.InvestIQStore.getAllocationData();
+
+  // Create subtle modern depth gradients for each slice
+  const stockGradient = ctx.createLinearGradient(0, 0, 0, 300);
+  stockGradient.addColorStop(0, "#3b82f6");
+  stockGradient.addColorStop(1, "#1d4ed8");
+
+  const bondGradient = ctx.createLinearGradient(0, 0, 0, 300);
+  bondGradient.addColorStop(0, "#8b5cf6");
+  bondGradient.addColorStop(1, "#6d28d9");
+
+  const commodityGradient = ctx.createLinearGradient(0, 0, 0, 300);
+  commodityGradient.addColorStop(0, "#f59e0b");
+  commodityGradient.addColorStop(1, "#d97706");
 
   new Chart(canvas, {
-    type: "pie",
+    type: "doughnut", // Doughnut provides a cleaner modern look than a flat pie chart
     data: {
-      labels: hasAssets ? allocation.labels : ["No Assets Yet"],
-      datasets: [{
-        data: hasAssets ? allocation.values : [1],
-        backgroundColor: hasAssets
-          ? [
-              "rgba(255, 99, 132, 0.6)",
-              "rgba(54, 162, 235, 0.6)",
-              "rgba(255, 206, 86, 0.6)"
-            ]
-          : ["rgba(148, 163, 184, 0.5)"],
-        borderColor: hasAssets
-          ? [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)"
-            ]
-          : ["rgba(148, 163, 184, 1)"],
-        borderWidth: 1
-      }]
+      labels: data.labels,
+      datasets: [
+        {
+          data: data.values,
+          backgroundColor: [stockGradient, bondGradient, commodityGradient],
+          borderColor: "#ffffff",
+          borderWidth: 3,
+          hoverBorderWidth: 4,
+          hoverOffset: 12
+        }
+      ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
+      cutout: "68%", // Donut inner cutout for sleek look
       plugins: {
         legend: {
-          position: "bottom"
+          position: "bottom",
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            pointStyle: "circle",
+            font: {
+              size: 13,
+              weight: "600",
+              family: "'Plus Jakarta Sans', sans-serif"
+            },
+            color: "#334155"
+          }
+        },
+        tooltip: {
+          backgroundColor: "#0f172a",
+          titleFont: { size: 14, weight: "700" },
+          bodyFont: { size: 13 },
+          padding: 12,
+          cornerRadius: 10,
+          displayColors: true,
+          callbacks: {
+            label: function (context) {
+              const label = context.label || "";
+              const value = window.InvestIQStore.formatCurrency(context.parsed);
+              return " " + label + ": " + value;
+            }
+          }
         }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
       }
     }
   });
-});
+}
