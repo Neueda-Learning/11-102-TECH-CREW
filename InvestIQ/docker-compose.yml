@@ -1,0 +1,68 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: investiq-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-investiq}
+      MYSQL_USER: ${MYSQL_USER:-investiq_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-investiq_password}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root123}"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    networks:
+      - investiq-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: investiq-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: ${SERVER_PORT:-8083}
+      SPRING_APPLICATION_NAME: InvestIQ
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-investiq}?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-investiq_user}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-investiq_password}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_SQL_INIT_MODE: always
+      # Finnhub market data API
+      MARKET_API_URL: ${MARKET_API_URL:-https://finnhub.io/api/v1}
+      MARKET_API_KEY: ${MARKET_API_KEY:-}
+      # Alpha Vantage API
+      ALPHA_VANTAGE_BASE_URL: ${ALPHA_VANTAGE_BASE_URL:-https://www.alphavantage.co/query}
+      ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY:-}
+      # Twelve Data API
+      TWELVE_DATA_BASE_URL: ${TWELVE_DATA_BASE_URL:-https://api.twelvedata.com}
+      TWELVE_DATA_API_KEY: ${TWELVE_DATA_API_KEY:-}
+    ports:
+      - "${APP_PORT:-8083}:8083"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/v3/api-docs >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    networks:
+      - investiq-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  investiq-network:
+    driver: bridge
+

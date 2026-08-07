@@ -1,0 +1,33 @@
+# Maven build output
+target/
+
+# Git and IDE files
+.git/
+.gitignore
+.idea/
+.vscode/
+*.iml
+*.classpath
+*.project
+*.settings/
+
+# Logs
+*.log
+logs/
+
+# Environment / secrets (never bake into image)
+.env
+.env.*
+
+# CI/CD files (not needed inside container)
+Jenkinsfile
+.compose_cmd
+
+# Documentation
+HELP.md
+README.md
+
+# OS metadata
+.DS_Store
+Thumbs.db
+

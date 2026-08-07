@@ -1,0 +1,162 @@
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
+
+    environment {
+        COMPOSE_CMD_FILE   = '.compose_cmd'
+        ENV_FILE           = '.env'
+        APP_PORT           = '8083'
+        SERVER_PORT        = '8083'
+        MARKET_API_KEY     = credentials('FINNHUB_API_KEY')
+        ALPHA_VANTAGE_API_KEY = credentials('ALPHA_VANTAGE_API_KEY')
+        TWELVE_DATA_API_KEY   = credentials('TWELVE_DATA_API_KEY')
+    }
+
+    stages {
+        stage('Checkout Source') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Validate Tooling') {
+            steps {
+                script {
+                    if (!isUnix()) {
+                        error('This pipeline requires a Linux Jenkins agent with docker, curl, and docker compose/docker-compose.')
+                    }
+
+                    sh 'docker --version'
+                    sh 'curl --version'
+
+                    def composeCmd = sh(
+                        script: '''
+if docker compose version >/dev/null 2>&1; then
+    echo "docker compose"
+elif docker-compose version >/dev/null 2>&1; then
+    echo "docker-compose"
+fi
+''',
+                        returnStdout: true
+                    ).trim()
+
+                    if (!composeCmd) {
+                        error('Neither docker compose nor docker-compose is available on this Jenkins agent.')
+                    }
+
+                    writeFile file: env.COMPOSE_CMD_FILE, text: composeCmd + "\n"
+                    sh "${composeCmd} version"
+                }
+            }
+        }
+
+        stage('Build App') {
+            steps {
+                sh 'chmod +x mvnw'
+                sh './mvnw -B clean package -DskipTests'
+            }
+        }
+
+        stage('Prepare Deploy Env') {
+            steps {
+                script {
+                    def marketApiKey = (env.MARKET_API_KEY ?: '').trim()
+                    if (!marketApiKey) {
+                        error('FINNHUB_API_KEY is required. Configure it as a Jenkins secret-text credential.')
+                    }
+
+                    def alphaKey = (env.ALPHA_VANTAGE_API_KEY ?: '').trim()
+                    if (!alphaKey) {
+                        error('ALPHA_VANTAGE_API_KEY is required. Configure it as a Jenkins secret-text credential.')
+                    }
+
+                    def twelveKey = (env.TWELVE_DATA_API_KEY ?: '').trim()
+                    if (!twelveKey) {
+                        error('TWELVE_DATA_API_KEY is required. Configure it as a Jenkins secret-text credential.')
+                    }
+
+                    def envContent = """
+MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD ?: 'root123'}
+MYSQL_DATABASE=${env.MYSQL_DATABASE ?: 'investiq'}
+MYSQL_USER=${env.MYSQL_USER ?: 'investiq_user'}
+MYSQL_PASSWORD=${env.MYSQL_PASSWORD ?: 'investiq_password'}
+MYSQL_PORT=${env.MYSQL_PORT ?: '3306'}
+APP_PORT=${env.APP_PORT ?: '8083'}
+SERVER_PORT=${env.SERVER_PORT ?: '8083'}
+MARKET_API_URL=${env.MARKET_API_URL ?: 'https://finnhub.io/api/v1'}
+MARKET_API_KEY=${marketApiKey}
+ALPHA_VANTAGE_BASE_URL=${env.ALPHA_VANTAGE_BASE_URL ?: 'https://www.alphavantage.co/query'}
+ALPHA_VANTAGE_API_KEY=${alphaKey}
+TWELVE_DATA_BASE_URL=${env.TWELVE_DATA_BASE_URL ?: 'https://api.twelvedata.com'}
+TWELVE_DATA_API_KEY=${twelveKey}
+""".trim() + "\n"
+
+                    writeFile file: env.ENV_FILE, text: envContent
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    def composeCmd = readFile(env.COMPOSE_CMD_FILE).trim()
+                    sh "${composeCmd} --env-file .env down --remove-orphans || true"
+                    sh "${composeCmd} --env-file .env up -d --build --remove-orphans"
+                    sh "${composeCmd} --env-file .env ps"
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                script {
+                    def composeCmd = readFile(env.COMPOSE_CMD_FILE).trim()
+
+                    sh '''
+APP_PORT=${APP_PORT:-8083}
+for i in $(seq 1 30); do
+  code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${APP_PORT}/v3/api-docs" || true)
+  if [ "$code" = "200" ]; then
+    echo "InvestIQ app is ready (HTTP $code)."
+    exit 0
+  fi
+  echo "Waiting for app readiness... ($i/30), last HTTP code=$code"
+  sleep 5
+done
+echo "App did not become ready within 150 seconds."
+exit 1
+'''
+
+                    // Verify static frontend is served by Spring Boot
+                    sh 'curl -fsS http://localhost:8083/ >/dev/null'
+                    sh "${composeCmd} --env-file .env ps"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                def composeCmd = fileExists(env.COMPOSE_CMD_FILE) ? readFile(env.COMPOSE_CMD_FILE).trim() : ''
+                if (composeCmd) {
+                    sh "${composeCmd} --env-file .env ps || true"
+                    sh "${composeCmd} --env-file .env logs --tail=150 || true"
+                }
+            }
+            sh 'rm -f .env .compose_cmd || true'
+        }
+        success {
+            echo 'InvestIQ deployment pipeline completed successfully.'
+        }
+        failure {
+            echo 'InvestIQ deployment pipeline failed. Review container logs above.'
+        }
+    }
+}
+
